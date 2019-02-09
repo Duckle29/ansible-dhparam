@@ -17,6 +17,8 @@
   shell: "openssl dhparam -in {{ dhparams_remote_path }}/{{ dhparams_filename }} -text | grep 'DH Parameters:' | sed 's/[^0-9]*//g'"
   register: dhparams_remote_key_size
   changed_when: false
+  debug:
+    msg: "Key size is {{ dhparams_remote_key_size.stdout }} bits"
 
 - name: Create local temp directory
   tempfile:
@@ -49,4 +51,4 @@
     path: '{{ temp_dir.path }}'
     state: absent
   delegate_to: localhost
-  when: temp_dir is defined
+  when: temp_dir.path is defined
