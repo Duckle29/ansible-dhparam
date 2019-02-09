@@ -45,7 +45,6 @@
     - dhparams_key_size|string != dhparams_remote_key_size.stdout
   
 - name: Remove local temp dir
-  become: true
   file:
     path: '{{ temp_dir.path }}'
     state: absent
