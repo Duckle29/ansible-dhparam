@@ -1,7 +1,7 @@
 ---
 
 dhparams_key_size: 4096
-dhparams_remote_path: /etc/ssl/ansible
+dhparams_remote_directory: /etc/ssl/ansible
 dhparams_filename: dhparams.pem
 dhparams_owner: root
 dhparams_group: root
