@@ -15,7 +15,7 @@
 
 - name: Get current key-size
   shell: "openssl dhparam -in {{ dhparams_remote_path }}/{{ dhparams_filename }} -text | grep 'DH Parameters:' | sed 's/[^0-9]*//g'"
-  register: dhparam_remote_key_size
+  register: dhparams_remote_key_size
   changed_when: false
 
 - name: Create local temp directory
