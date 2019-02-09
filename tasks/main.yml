@@ -13,7 +13,9 @@
     mode: '{{ dhparams_directory_mode }}'
 
 - name: Get current key-size
-  shell: "openssl dhparam -in '{{ dhparams_remote_directory }}/{{ dhparams_filename }}' -text | grep 'DH Parameters:' | sed 's/[^0-9]*//g'"
+  shell: >-
+    openssl dhparam -in '{{ dhparams_remote_directory }}/{{ dhparams_filename }}'
+    -text | grep 'DH Parameters:' | sed 's/[^0-9]*//g'
   register: dhparams_remote_key_size
   changed_when: false
   
@@ -45,7 +47,7 @@
     mode: '{{ dhparams_mode }}'
   when:
     - dhparams_key_size|string != dhparams_remote_key_size.stdout
-  
+
 - name: Remove local temp dir
   file:
     path: '{{ temp_dir.path }}'
