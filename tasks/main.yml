@@ -1,6 +1,6 @@
 ---
 
-- name: Ensure opelssl is installed
+- name: Ensure openssl is installed
   become: true
   package:
     name: openssl
