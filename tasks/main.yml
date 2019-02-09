@@ -29,6 +29,7 @@
 - name: Generate dhparams locally. This can take a long time.
   openssl_dhparam:
     path: '{{ temp_dir.path }}/dhparams.pem'
+    size: '{{ dhparams_key_size }}'
   when:
     - dhparams_key_size != dhparams_remote_key_size.stdout
   delegate_to: localhost
