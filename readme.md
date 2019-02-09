@@ -1,4 +1,4 @@
-## What is ansible-dhparam? [![Build Status](https://travis-ci.com/Duckle29/ansible-dhparams.svg?branch=master)](https://travis-ci.com/Duckle29/ansible-dhparams)
+## What is ansible-dhparam? [![Build Status](https://travis-ci.com/Duckle29/ansible-dhparam.svg?branch=master)](https://travis-ci.com/Duckle29/ansible-dhparam)
 
 It is an [Ansible](http://www.ansible.com/home) role to:
 
