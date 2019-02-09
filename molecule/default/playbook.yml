@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+
+  vars:
+    dhparams_key_size: 128
+
+  pre_tasks:
+
+  roles:
+    - role: duckle29.dhparam

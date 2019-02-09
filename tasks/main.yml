@@ -1,5 +1,4 @@
 ---
-
 - name: Ensure openssl is installed
   become: true
   package:
