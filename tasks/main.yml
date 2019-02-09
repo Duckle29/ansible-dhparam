@@ -23,15 +23,19 @@
     state: directory
   register: temp_dir
   when:
-    - dhparams_key_size != dhparams_remote_key_size.stdout
+    - dhparams_key_size|string != dhparams_remote_key_size.stdout
   delegate_to: localhost
+
+- name: Debug
+  debug:
+    msg: "{{ dhparams_key_size }} || {{ dhparams_remote_key_size.stdout }}"
 
 - name: Generate dhparams locally. This can take a long time.
   openssl_dhparam:
     path: '{{ temp_dir.path }}/dhparams.pem'
     size: '{{ dhparams_key_size }}'
   when:
-    - dhparams_key_size != dhparams_remote_key_size.stdout
+    - dhparams_key_size|string != dhparams_remote_key_size.stdout
   delegate_to: localhost
 
 - name: Transfer dhparams to remote server
@@ -41,4 +45,11 @@
     owner: '{{ dhparams_owner }}'
     group: '{{ dhparams_group }}'
     mode: '{{ dhparams_mode }}'
+  when:
+    - dhparams_key_size|string != dhparams_remote_key_size.stdout
   
+- name: Remove local temp dir
+  become: true
+  file:
+    path: '{{ dhparams_remote_path }}'
+    state: absent
