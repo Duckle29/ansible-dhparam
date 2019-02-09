@@ -4,7 +4,7 @@ services: docker
 
 env:
   global:
-    - ROLE_NAME: 'dhparams'
+    - ROLE_NAME: 'dhparam'
 
   matrix:
     - MOLECULE_DISTRO: centos6
