@@ -19,6 +19,7 @@
     -text | grep 'DH Parameters:'
   register: dhparams_remote_key_size
   changed_when: false
+  ignore_errors: true
 
 - debug:
     msg: "Key size is {{ dhparams_remote_key_size.stdout }} bits"
