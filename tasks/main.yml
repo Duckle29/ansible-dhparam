@@ -23,23 +23,29 @@
   changed_when: false
   ignore_errors: true
 
-- debug:
+- name: debuginfo
+  debug:
     msg: "Key size is {{ dhparams_remote_key_size.stdout }} bits"
 
 - name: Create local temp directory
-  file:
-    path: '{{ dhparams_temp_dir }}'
+  become: false
+  tempfile:
     state: directory
+  register: dhparams_temp_dir
   when:
     - dhparams_key_size|string != dhparams_remote_key_size.stdout
   delegate_to: localhost
 
-- debug:
+- name: debuginfo
+  debug:
     msg: "Generating a {{ dhparams_key_size }} bit key"
+  when:
+    - dhparams_key_size|string != dhparams_remote_key_size.stdout
 
 - name: Generate dhparams locally. This can take a long time.
+  become: false
   openssl_dhparam:
-    path: '{{ dhparams_temp_dir }}/dhparams.pem'
+    path: '{{ dhparams_temp_dir.path }}/dhparams.pem'
     size: '{{ dhparams_key_size }}'
   when:
     - dhparams_key_size|string != dhparams_remote_key_size.stdout
@@ -47,7 +53,7 @@
 
 - name: Transfer dhparams to remote server
   copy:
-    src: '{{ dhparams_temp_dir }}/dhparams.pem'
+    src: '{{ dhparams_temp_dir.path }}/dhparams.pem'
     dest: '{{ dhparams_remote_directory }}/{{ dhparams_filename }}'
     owner: '{{ dhparams_owner }}'
     group: '{{ dhparams_group }}'
@@ -56,7 +62,10 @@
     - dhparams_key_size|string != dhparams_remote_key_size.stdout
 
 - name: Remove local temp dir
+  become: false
   file:
-    path: '{{ dhparams_temp_dir }}'
+    path: '{{ dhparams_temp_dir.path }}'
     state: absent
+  when: dhparams_temp_dir.path is defined
+
   delegate_to: localhost

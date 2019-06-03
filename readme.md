@@ -15,7 +15,6 @@ dhparams_owner: root
 dhparams_group: root
 dhparams_mode: u=rw,g=r,o=r
 dhparams_directory_mode: u=rw,g=r,o=r
-dhparams_temp_dir: ./ansible.dhparam.temp
 ```
 
 ## Example usage
