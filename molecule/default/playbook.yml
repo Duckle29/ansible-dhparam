@@ -3,7 +3,7 @@
   hosts: all
 
   vars:
-    dhparams_key_size: 128
+    dhparams_key_size: 512
 
   pre_tasks:
 
