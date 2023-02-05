@@ -1,19 +1,19 @@
 ---
 - name: Ensure openssl is installed
   become: true
-  package:
+  ansible.builtin.package:
     name: openssl
     state: present
 
 - name: Ensure remote folder is present
   become: true
-  file:
+  ansible.builtin.file:
     path: '{{ dhparams_remote_directory }}'
     state: directory
     mode: '{{ dhparams_directory_mode }}'
 
 - name: Get current key-size
-  shell: >-
+  ansible.builtin.shell: >-
     openssl dhparam -in
     '{{ dhparams_remote_directory }}/{{ dhparams_filename }}'
     -text | grep -i 'dh parameters:' |
@@ -24,12 +24,12 @@
   ignore_errors: true
 
 - name: debuginfo
-  debug:
+  ansible.builtin.debug:
     msg: "Key size is {{ dhparams_remote_key_size.stdout }} bits"
 
 - name: Create local temp directory
   become: false
-  tempfile:
+  ansible.builtin.tempfile:
     state: directory
   register: dhparams_temp_dir
   when:
@@ -37,14 +37,14 @@
   delegate_to: localhost
 
 - name: debuginfo
-  debug:
+  ansible.builtin.debug:
     msg: "Generating a {{ dhparams_key_size }} bit key"
   when:
     - dhparams_key_size|string != dhparams_remote_key_size.stdout
 
 - name: Generate dhparams locally. This can take a long time.
   become: false
-  openssl_dhparam:
+  community.crypto.openssl_dhparam:
     path: '{{ dhparams_temp_dir.path }}/dhparams.pem'
     size: '{{ dhparams_key_size }}'
   when:
@@ -52,7 +52,7 @@
   delegate_to: localhost
 
 - name: Transfer dhparams to remote server
-  copy:
+  ansible.builtin.copy:
     src: '{{ dhparams_temp_dir.path }}/dhparams.pem'
     dest: '{{ dhparams_remote_directory }}/{{ dhparams_filename }}'
     owner: '{{ dhparams_owner }}'
@@ -63,7 +63,7 @@
 
 - name: Remove local temp dir
   become: false
-  file:
+  ansible.builtin.file:
     path: '{{ dhparams_temp_dir.path }}'
     state: absent
   when: dhparams_temp_dir.path is defined

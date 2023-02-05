@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  namespace: "duckle29"
   role_name: "dhparam"
   author: "Mikkel Jeppesen"
   description: "Locally generate dhparamters and transfer them"
